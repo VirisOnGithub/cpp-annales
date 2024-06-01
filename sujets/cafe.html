@@ -1,0 +1,58 @@
+<div class="e">
+    <h1>Organisation d'un café</h1><br>
+    <p>Vous êtes en charge de l'Organisation d'un café</p><br>
+    <p>Pour cela, vous devrez gérer l'ensemble des tables dans le café, ainsi que toutes les commandes qui le composent.</p>
+    <div style="display: flex; justify-content: center; width: 100%;">
+        <button id="goToSlide2">Questions</button>
+    </div>
+</div>
+<div class="e">
+    <h2>Implémentations des structures</h2>
+    <ul>
+        <li>Une table est composée d'un numéro, d'un tableau de clients (qui sera vu comme un tableau de chaînes de caractères), et d'une commande qui sera une chaîne de caractères.</li>
+        <li>Un café est composé d'un nom, d'une adresse, et d'un ensemble de tables </li><br>
+    </ul>
+    <ol>
+        <li>Créer deux constantes, CHMAX et TABLEMAX, de valeurs respectives 100 et 20. CHMAX désigne le nombre maximal de caractères dans une chaîne, tandis que TABLEMAX désignera le nombre maximal de tables dans un café</li>
+        <li>Créer les structures table et café</li>
+        <li>Créer une fonction qui remplit une table et la renvoie, que l'on notera <b>remplir_table</b>. Pour ceci, on demandera d'abord le nombre de clients de client, puis pour chacun, son nom et sa commande. Toutes les commandes seront ensuite concaténées dans la même chaîne de caractères, séparés par des points</li>
+        <li>Créer une fonction qui affiche un café, avec toutes ses informations</li>
+        <li>Créer le programme principal, il doit créer un café en demandant ses caractéristiques, puis ensuite tirer une table aléatoire pour demander sa commande.</li>
+    </ol>
+    <div style="display: flex; justify-content: center; width: 100%;">
+        <button id="goToSlide3">Indices et Solutions</button>
+    </div>
+</div>
+
+<div class="i">
+    <p>Les constantes sont des entiers, de type <code>int</code>. Ainsi, vous devez les déclarer avec les mots-clés <code>const int</code></p>
+</div>
+<div class="s">
+    <pre><code>
+        const int CHMAX = 100;
+        const int TABLEMAX = 20;
+
+        // ou
+
+        const unsigned int CHMAX = 100, TABLEMAX = 20;
+    </code></pre>
+</div>
+<div class="i">
+    <p>Les structures sont déclarées avec le mot-clé <code>struct</code>, suivi du nom de la structure, et des accolades contenant les champs de la structure</p>
+    <p>N'oubliez pas le point virgule à la fin de la déclaration de la structure !</p>
+    <p>Enfin, n'oubliez pas qu'une chaîne de caractères est un tableau de <code>char</code>, et que la structure <b>café</b> doit instancier un tableau de structure <b>table</b></p>
+</div>
+<div class="i">
+    <p>La fonction <b>remplir_table</b> doit retourner une structure <b>table</b>, et prendre en paramètre le nombre de clients de la table</p>
+    <p>On peut demander le nombre de clients avec <code>cin</code>
+    <p>Enfin, on peut concaténer les commandes avec la fonction <code>strcat()</code>. Attention, n'oubliez pas d'inclure la bibliothèque<code>&lt;string&gt;</code></p>
+</div>
+<div class="i">
+    <p>Pour demander un café, il suffit de l'instancier et de poser les questions à l'utilisateur une à une.</p>
+</div>
+<div class="i">
+    <p>Pour le programme principal, utiliser les fonctions des questions 3 et 4.</p>
+    <p>Pour le tirage aléatoire des tables, il faut utiliser la fonction <code>rand()</code>. Voir son utilisation dans les fiches.</p>
+    <p>Attention, avant d'utiliser <code>rand()</code>, vous devez initialiser le compteur aléatoire avec <code>srand(time(NULL));</code></p>
+    <p>N'oubliez pas d'inclure les bibliothèques nécessaires : <code>&lt;stdlib.h&gt;</code> pour la fonction <code>rand()</code> et <code>&lt;time.h&gt;</code> pour l'initialisation.</p>
+</div>

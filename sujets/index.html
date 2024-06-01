@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css"
+        integrity="sha256-5uKiXEwbaQh9cgd2/5Vp6WmMnsUr3VZZw0a8rKnOKNU=" crossorigin="anonymous">
+    <!--HighlightJS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        h1 {
+            text-align: center;
+        }
+        #splide, iframe {
+            width: 50vw;
+            height: 100vh;
+        }
+        div.container {
+            display: flex;
+            justify-content: space-around;
+        }
+        @media screen and (prefers-color-scheme: dark) {
+            body {
+                background-color: #1f2023;
+                color: white;
+            }
+            div.container, code, .hljs_type {
+                background-color: #2d2e31;
+            }
+        }
+        @media screen and (min-width: 1615px) and (prefers-color-scheme: dark) {
+            body {
+                background-color: #1f2023;
+                color: white;
+            }
+            div.container {
+                background-color: #383b40;
+            }            
+        }
+        @media screen and (min-width: 1615px) and (prefers-color-scheme: light) {
+            body {
+                background-color: #f0f0f0;
+                color: black;
+            }
+            div.container {
+                background-color: #eff2f7;
+            }            
+
+        }
+        #indice, [id^="goToSlide"] {
+            padding: 1em;
+            margin: 1em;
+        }
+
+
+        /* Quand aucun sujet n'est soumis */
+
+        .sujet {
+            padding: 1em;
+            margin: 1em 25%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+
+            font-size: 1.5em;
+
+            transition: background-color 0.3s;
+
+            &:hover {
+                background-color: #0056b3;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"
+        integrity="sha256-FZsW7H2V5X9TGinSjjwYJ419Xka27I8XPDmWryGlWtw=" crossorigin="anonymous"></script>
+    <script>
+        let params = new URLSearchParams(window.location.search);
+
+        let sujet = params.get('sujet');
+
+        if(sujet){
+            var html;
+            fetch('./sujets.json')
+                .then(response => response.json())
+                .then(data => {
+                    if(!data[sujet]){
+                        document.body.style.display = 'flex';
+                        document.body.style.justifyContent = 'center';
+                        document.body.style.alignItems = 'center';
+                        document.body.style.height = '100vh';
+                        document.body.innerHTML = '<h1>Le sujet demandé n\'existe pas</h1>';
+                        return;
+                    }
+                    html = data[sujet].html;
+
+
+                    fetch('./' + html)
+                        .then(response => response.text())
+                        .then(data => {
+                            document.body.innerHTML = `
+                                <div class="container">
+                                    <div id="splide" class="splide">
+                                        <div class="splide__track">
+                                            <ul class="splide__list">
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <iframe src="https://www.programiz.com/cpp-programming/online-compiler/" frameborder="0"></iframe>
+                                </div>
+                            `;
+
+                            let parser = new DOMParser();
+                            let doc = parser.parseFromString(data, 'text/html');
+                            let enonces = doc.querySelectorAll('.e');
+                            let place = document.querySelector('.splide__list');
+                            enonces.forEach(enonce => {
+                                let li = document.createElement('li');
+                                li.classList.add('splide__slide');
+                                li.appendChild(enonce);
+                                place.appendChild(li);
+                            });
+
+                            let indices = doc.querySelectorAll('.i');
+                            let solutions = doc.querySelectorAll('.s');
+
+                            let iets = document.createElement('li');
+                            iets.classList.add('splide__slide');
+                            iets.innerHTML = `
+                                <h1>Indices et Solutions</h1>
+                                <p style="text-align: center">Chaque indice est relié à sa question</p>
+                                <h2>Indices</h2>
+                            `;
+                            indices.forEach((indice, index) => {
+                                let i = `
+                                    <button onclick="reveleIndice(${index + 1})" id="indice">Indice ${index + 1}</button>
+                                `;
+                                iets.innerHTML += i;
+                            })
+                            indices.forEach((indice, index) => {
+                                let i = `
+                                <div class="i${index + 1} scrolled" style="display: none;">
+                                    ${indice.innerHTML}
+                                </div>
+                            `;
+                                iets.innerHTML += i;
+                            })
+
+                            place.appendChild(iets);
+
+                            // Initialiser Splide ici, après avoir ajouté toutes les slides
+                            var splide = new Splide('.splide', {
+                                perPage: 1,
+                                perMove: 1,
+                                pagination: false,
+                                arrows: true,
+                            });
+                            splide.mount();
+
+                            document.querySelectorAll('[id^="goToSlide"]').forEach((element) => {
+                                let index = parseInt(element.id.replace('goToSlide', '')) - 1;
+                                element.addEventListener('click', () => {
+                                    splide.go(index);
+                                });
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Erreur :', error);
+                        });
+                })
+        } else {
+            fetch('./sujets.json')
+                .then(response => response.json())
+                .then(data => {
+                    document.body.innerHTML = '<h1>Choisissez un sujet</h1>';
+                    let container = document.createElement('div');
+                    container.classList.add('container');
+                    container.style.flexDirection = 'column';
+                    document.body.appendChild(container);
+                    for (let sujet in data) {
+                        let button = document.createElement('button');
+                        button.classList.add('sujet');
+                        button.innerHTML = data[sujet].nom;
+                        button.addEventListener('click', () => {
+                            window.location.href = `?sujet=${sujet}`;
+                        });
+                        container.appendChild(button);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur :', error);
+                });
+        }
+    </script>
+    <script>
+        function reveleIndice(index) {
+            let scrolled = document.querySelectorAll('.scrolled');
+            let indice = document.querySelector(`.i${index}`);
+            scrolled = Array.from(scrolled).filter(element => element !== indice); // pour pouvoir recliquer sur le bouton
+            scrolled.forEach(element => {
+                element.style.display = 'none';
+            });
+            if (indice.style.display === 'none') {
+                indice.style.display = 'block';
+            } else {
+                indice.style.display = 'none';
+            }
+            document.querySelectorAll('code').forEach((block) => {
+                block.classList.add('language-cpp')
+                hljs.highlightBlock(block);
+            });
+        }
+    </script>
+</body>
+</html>

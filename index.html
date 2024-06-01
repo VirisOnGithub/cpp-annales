@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annales C++</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .h-40vh {
+            height: 40vh;
+        }
+        .button {
+            height: 100px;
+            width: 30%;
+            font-size: 1.5rem;
+        }
+        @media screen and (max-width: 768px){
+            .button {
+                width: 80%;
+            }
+            .container-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="absolute inset-0 flex flex-col items-center justify-around text-6xl font-bold">
+        LIFAPI
+        <span></span>
+    </h1>
+    <div class="container-buttons flex w-full justify-around items-center h-40vh absolute bottom-0 mb-10 font-extrabold">
+        <a href="fiches/" class="button no-underline bg-blue-500 p-5 rounded-2xl hover:scale-110 hover:bg-blue-600 ease-in-out duration-100 flex items-center justify-center">
+            Fiches de cours
+        </a>
+        <a href="./sujets/" class="button no-underline bg-blue-500 p-5 rounded-2xl hover:scale-110 hover:bg-blue-600 ease-in-out duration-100 flex items-center justify-center">
+            Sujets tests
+        </a>
+    </div>
+</body>
+</html>
+
+<!--<iframe src="https://www.programiz.com/cpp-programming/online-compiler/" frameborder="0"></iframe>
