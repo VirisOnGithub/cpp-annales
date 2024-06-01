@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Annales CPP</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css"
         integrity="sha256-5uKiXEwbaQh9cgd2/5Vp6WmMnsUr3VZZw0a8rKnOKNU=" crossorigin="anonymous">
     <!--HighlightJS-->
@@ -20,6 +20,8 @@
         div.container {
             display: flex;
             justify-content: space-around;
+            overflow: auto;
+            height: 100vh;
         }
         @media screen and (prefers-color-scheme: dark) {
             body {
@@ -131,6 +133,7 @@
 
                             let indices = doc.querySelectorAll('.i');
                             let solutions = doc.querySelectorAll('.s');
+                            let solutionEntiere = doc.querySelector('.solution-entiere');
 
                             let iets = document.createElement('li');
                             iets.classList.add('splide__slide');
@@ -153,6 +156,35 @@
                             `;
                                 iets.innerHTML += i;
                             })
+
+                            iets.innerHTML += `
+                                <h2>Solutions</h2>
+                            `;
+
+                            solutions.forEach((solution, index) => {
+                                let i = `
+                                    <button onclick="reveleSolution(${index + 1})" id="indice">Solution ${index + 1}</button>
+                                `;
+                                iets.innerHTML += i;
+                            })
+
+                            solutions.forEach((solution, index) => {
+                                let i = `
+                                <div class="s${index + 1} scrolled" style="display: none;">
+                                    ${solution.innerHTML}
+                                </div>
+                            `;
+                                iets.innerHTML += i;
+                            })
+
+                            let i = `
+                                <button onclick="reveleSolutionEntiere()" id="indice">Solution entière</button>
+                                <div class="solution-entiere scrolled" style="display: none;">
+                                    ${solutionEntiere.innerHTML}
+                                </div>
+                            `;
+
+                            iets.innerHTML += i;
 
                             place.appendChild(iets);
 
@@ -216,6 +248,42 @@
             document.querySelectorAll('code').forEach((block) => {
                 block.classList.add('language-cpp')
                 hljs.highlightBlock(block);
+            });
+        }
+
+        function reveleSolution(index) {
+            let scrolled = document.querySelectorAll('.scrolled');
+            let solution = document.querySelector(`.s${index}`);
+            scrolled = Array.from(scrolled).filter(element => element !== solution); // pour pouvoir recliquer sur le bouton
+            scrolled.forEach(element => {
+                element.style.display = 'none';
+            });
+            if (solution.style.display === 'none') {
+                solution.style.display = 'block';
+            } else {
+                solution.style.display = 'none';
+            }
+            document.querySelectorAll('code').forEach((block) => {
+                block.classList.add('language-cpp')
+                hljs.highlightElement(block);
+            });
+        }
+
+        function reveleSolutionEntiere() {
+            let scrolled = document.querySelectorAll('.scrolled');
+            let solution = document.querySelector('.solution-entiere');
+            scrolled = Array.from(scrolled).filter(element => element !== solution); // pour pouvoir recliquer sur le bouton
+            scrolled.forEach(element => {
+                element.style.display = 'none';
+            });
+            if (solution.style.display === 'none') {
+                solution.style.display = 'block';
+            } else {
+                solution.style.display = 'none';
+            }
+            document.querySelectorAll('code').forEach((block) => {
+                block.classList.add('language-cpp')
+                hljs.highlightElement(block);
             });
         }
     </script>

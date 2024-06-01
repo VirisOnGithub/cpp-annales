@@ -27,16 +27,6 @@
 <div class="i">
     <p>Les constantes sont des entiers, de type <code>int</code>. Ainsi, vous devez les déclarer avec les mots-clés <code>const int</code></p>
 </div>
-<div class="s">
-    <pre><code>
-        const int CHMAX = 100;
-        const int TABLEMAX = 20;
-
-        // ou
-
-        const unsigned int CHMAX = 100, TABLEMAX = 20;
-    </code></pre>
-</div>
 <div class="i">
     <p>Les structures sont déclarées avec le mot-clé <code>struct</code>, suivi du nom de la structure, et des accolades contenant les champs de la structure</p>
     <p>N'oubliez pas le point virgule à la fin de la déclaration de la structure !</p>
@@ -55,4 +45,132 @@
     <p>Pour le tirage aléatoire des tables, il faut utiliser la fonction <code>rand()</code>. Voir son utilisation dans les fiches.</p>
     <p>Attention, avant d'utiliser <code>rand()</code>, vous devez initialiser le compteur aléatoire avec <code>srand(time(NULL));</code></p>
     <p>N'oubliez pas d'inclure les bibliothèques nécessaires : <code>&lt;stdlib.h&gt;</code> pour la fonction <code>rand()</code> et <code>&lt;time.h&gt;</code> pour l'initialisation.</p>
+</div>
+
+<!--              SOLUTIONS                -->
+<div class="s">
+    <pre><code>
+        const int CHMAX = 100;
+        const int TABLEMAX = 20;
+
+        // ou
+
+        const unsigned int CHMAX = 100, TABLEMAX = 20;
+    </code></pre>
+</div>
+<div class="s">
+    <pre><code>
+        struct table {
+            int numero;
+            char clients[CHMAX][CHMAX];
+            char commande[CHMAX];
+        };
+
+        struct cafe {
+            char nom[CHMAX];
+            char adresse[CHMAX];
+            struct table tables[TABLEMAX];
+        };
+    </code></pre>
+</div>
+<div class="s">
+    <pre><code>
+        struct table remplir_table(int nb_clients) {
+            struct table t;
+            cout << "Table remplie de " << nb_clients << " clients" << endl;
+            t.numero = rand() % 100;
+            for (int i = 0; i < nb_clients; i++) {
+                cout << "Nom du client " << i + 1 << " : ";
+                cin >> t.clients[i];
+                cout << "Commande du client " << i + 1 << " : ";
+                cin >> t.commande;
+                strcat(t.commande, ".");
+            }
+            return t;
+        }
+    </code></pre>
+</div>
+<div class="s">
+    <pre><code>
+        void afficher_cafe(struct cafe c) {
+            cout << "Café " << c.nom << " situé à " << c.adresse << endl;
+            for (int i = 0; i < TABLEMAX; i++) {
+                cout << "Table " << c.tables[i].numero << " : " << endl;
+                for (int j = 0; j < CHMAX; j++) {
+                    cout << "Client " << j + 1 << " : " << c.tables[i].clients[j] << endl;
+                }
+                cout << "Commande : " << c.tables[i].commande << endl;
+            }
+        }
+    </code></pre>
+</div>
+<div class="s">
+    <pre><code>
+        int main() {
+            srand(time(NULL));
+            struct cafe c;
+            cout << "Nom du café : ";
+            cin >> c.nom;
+            cout << "Adresse du café : ";
+            cin >> c.adresse;
+            c.tables[0] = remplir_table(3);
+            afficher_cafe(c);
+            return 0;
+        }
+    </code></pre>
+</div>
+<div class="solution-entiere">
+    <pre><code>
+        const int CHMAX = 100;
+        const int TABLEMAX = 20;
+
+        struct table {
+            int numero;
+            char clients[CHMAX][CHMAX];
+            char commande[CHMAX];
+        };
+
+        struct cafe {
+            char nom[CHMAX];
+            char adresse[CHMAX];
+            struct table tables[TABLEMAX];
+        };
+
+        struct table remplir_table(int nb_clients) {
+            struct table t;
+            cout << "Table remplie de " << nb_clients << " clients" << endl;
+            t.numero = rand() % 100;
+            for (int i = 0; i < nb_clients; i++) {
+                cout << "Nom du client " << i + 1 << " : ";
+                cin >> t.clients[i];
+                cout << "Commande du client " << i + 1 << " : ";
+                cin >> t.commande;
+                strcat(t.commande, ".");
+            }
+            return t;
+        }
+
+        void afficher_cafe(struct cafe c) {
+            cout << "Café " << c.nom << " situé à " << c.adresse << endl;
+            for (int i = 0; i < TABLEMAX; i++) {
+                cout << "Table " << c.tables[i].numero << " : " << endl;
+                for (int j = 0; j < CHMAX; j++) {
+                    cout << "Client " << j + 1 << " : " << c.tables[i].clients[j] << endl;
+                }
+                cout << "Commande : " << c.tables[i].commande << endl;
+            }
+        }
+
+        int main() {
+            srand(time(NULL));
+            struct cafe c;
+            cout << "Nom du café : ";
+            cin >> c.nom;
+            cout << "Adresse du café : ";
+            cin >> c.adresse;
+            c.tables[0] = remplir_table(3);
+            afficher_cafe(c);
+            return 0;
+        }
+    </code></pre>
 </div>
