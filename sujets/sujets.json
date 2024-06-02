@@ -3,5 +3,10 @@
         "nom": "Organisation d'un café",
         "html": "cafe.html",
         "param": "cafe"
+    },
+    {
+        "nom": "Jeu des 21 allumettes",
+        "html": "21allumettes.html",
+        "param": "21allumettes"
     }
 ]

@@ -1,0 +1,150 @@
+<div class="e">
+    <h1>21 allumettes</h1>
+    <p>On dispose de 21 allumettes. Deux joueurs jouent tour à tour. A chaque tour, un joueur peut prendre 1, 2 ou 3 allumettes. Celui qui prend la dernière allumette a perdu.</p>
+    <p>Le but de ce sujet est d'écrire un programme qui simule ce jeu. Le programme doit demander à chaque joueur le nombre d'allumettes qu'il souhaite prendre, et afficher le nombre d'allumettes restantes après chaque tour.</p>
+    <p>Le programme doit également afficher le nom du joueur qui a perdu.</p>
+</div>
+<div class="e">
+    <h2>1ère partie</h2>
+    <ol>
+        <li>Définir la constante MAXCH, qui vaudra ici 50. (Le choix du type est ici laissé libre, mais on valorisera des types plus avantageux au niveau de la mémoire).</li>
+        <li>Créer la procédure <b>changementJoueur</b>, qui prendra une référence sur le booléen <b>joueur</b>, et qui changera son état pour changer de joueur. Attention, vous ne devez pas utiliser de test <b>if</b> !</li>
+        <li>Créer la procédure <b>demanderNomsJoueurs</b>, qui prendra en paramètre un tableau de chaînes de caractères, et qui demandera les noms des joueurs, en utilisant une boucle <b>for</b></li>
+        <li>Créer le programme principal. Celui-ci aura plusieurs variables : <b>allumettes</b>, initialisé à 21, le booléen joueur, initialisé à 0, et <b>nomJoueurs</b>, un tableau de chaînes de caractères qui contiendra les noms des joueurs. </li>
+        <li>Dans le programme principal, demander les noms des joueurs, puis lancer une boucle qui se répétera tant qu'il reste des allumettes. Dans cette boucle, demander au joueur combien d'allumettes il veut prendre, en vérifiant la validité du choix, puis changer de joueur. </li>
+        <li>Enfin, afficher le nom du joueur qui a perdu.</li>
+    </ol>
+</div>
+<div class="e">
+    <h2>2ème partie</h2>
+</div>
+<div class="i">
+    <p>Les constantes sont des entiers, de type <code>int</code>. Ainsi, vous devez les déclarer avec les mots-clés
+        <code>const int</code></p>
+    <p>Pour le type de la constante, réfléchissez à ce que représente MAXCH, puis à son signe, et sa plage de donnée. Par exemple, une chaîne de caractères pourrait marcher, mais ce n'est ni pratique ni optimisé ; un <b>long double</b> est également inutile, puisqu'il peut stocker des valeurs qui vont de -1.18973e+4932 à 1.18973e+4932.</p>
+</div>
+<div class="i">
+    <p>Si on pouvait utiliser un <b>if</b>, on pourrait faire comme ceci :</p>
+    <pre><code>
+        void changementJoueur(bool &joueur) {
+            if (joueur == 1) {
+                joueur = 0;
+            } else {
+                joueur = 1;
+            }
+        }
+    </code></pre>
+    <p>Mais ici, on ne peut pas utiliser de <b>if</b>. Il faut donc trouver une autre solution.</p>
+    <p>Par exemple, on sait que joueur ne vaut que 0 ou 1. Avec un peu de réflexion, comment trouver une opération qui donne 0 si on lui donne 1, et 1 si on lui donne 0 ?</p>
+</div>
+<div class="i">
+    <p>La procédure <b>demanderNomsJoueurs</b> doit prendre en paramètre un tableau de chaînes de caractères. On peut demander les noms des joueurs avec <code>cin</code>, et les stocker dans le tableau de chaînes de caractères.</p>
+    <p>On peut utiliser une boucle <b>for</b> pour demander les noms des joueurs, en utilisant la variable de boucle pour accéder à chaque case du tableau.</p>
+</div>
+<div class="i">
+    <p>Le programme principal doit instancier les variables demandées, et appeler les fonctions des questions 2 et 3.</p>
+    <p>Il doit ensuite lancer une boucle qui se répète tant qu'il reste des allumettes. Dans cette boucle, il suffit de demander au joueur combien d'allumettes il veut prendre, vérifier si le choix est valide, et seulement si c'est le cas, changer de joueur.</p>
+</div>
+<div class="s">
+    <pre><code>
+        const int MAXCH = 50;
+    </code></pre>
+</div>
+<div class="s">
+    <pre><code>
+        void changementJoueur(bool &joueur) {
+            joueur = 1 - joueur;
+
+            // ou
+
+            joueur = !joueur;
+
+            // ou
+
+            joueur ^= 1;
+
+            // ou 
+
+            joueur = joueur ? 0 : 1;
+        }
+    </code></pre>
+</div>
+<div class="s">
+    <pre><code>
+        void demanderNomsJoueurs(char noms[2][MAXCH]) {
+            for (int i = 0; i < 2; i++) {
+                cout << "Nom du joueur " << i + 1 << " : ";
+                cin >> noms[i];
+            }
+        }
+    </code></pre>
+</div>
+<div class="s">
+    <pre><code>
+        int main() {
+            int allumettes = 21;
+            bool joueur = 0;
+            char nomJoueurs[2][MAXCH];
+
+            demanderNomsJoueurs(nomJoueurs);
+
+            while (allumettes > 0) {
+                int choix;
+                cout << "Il reste " << allumettes << " allumettes." << endl;
+                cout << nomJoueurs[joueur] << ", combien d'allumettes voulez-vous prendre ? ";
+                cin >> choix;
+                if (choix >= 1 && choix <= 3) {
+                    allumettes -= choix;
+                    changementJoueur(joueur);
+                } else {
+                    cout << "Choix invalide." << endl;
+                }
+            }
+
+            cout << nomJoueurs[joueur] << " a perdu !" << endl;
+
+            return 0;
+        }
+    </code></pre>
+</div>
+<div class="solution-entiere">
+    <pre><code>
+        const int MAXCH = 50;
+
+        void changementJoueur(bool &joueur) {
+            joueur = 1 - joueur;
+        }
+
+        void demanderNomsJoueurs(char noms[2][MAXCH]) {
+            for (int i = 0; i < 2; i++) {
+                cout << "Nom du joueur " << i + 1 << " : ";
+                cin >> noms[i];
+            }
+        }
+
+        int main() {
+            int allumettes = 21;
+            bool joueur = 0;
+            char nomJoueurs[2][MAXCH];
+
+            demanderNomsJoueurs(nomJoueurs);
+
+            while (allumettes > 0) {
+                int choix;
+                cout << "Il reste " << allumettes << " allumettes." << endl;
+                cout << nomJoueurs[joueur] << ", combien d'allumettes voulez-vous prendre ? ";
+                cin >> choix;
+                if (choix >= 1 && choix <= 3) {
+                    allumettes -= choix;
+                    changementJoueur(joueur);
+                } else {
+                    cout << "Choix invalide." << endl;
+                }
+            }
+
+            cout << nomJoueurs[joueur] << " a perdu !" << endl;
+
+            return 0;
+        }
+    </code></pre>
+</div>
