@@ -51,7 +51,7 @@
             }            
 
         }
-        #indice, [id^="goToSlide"] {
+        [id^="solution"], [id^="indice"], [id^="goToSlide"] {
             padding: 1em;
             margin: 1em;
         }
@@ -144,7 +144,7 @@
                             `;
                             indices.forEach((indice, index) => {
                                 let i = `
-                                    <button onclick="reveleIndice(${index + 1})" id="indice">Indice ${index + 1}</button>
+                                    <button onclick="reveleIndice(${index + 1})" id="indice${index + 1}">Indice ${index + 1}</button>
                                 `;
                                 iets.innerHTML += i;
                             })
@@ -163,7 +163,7 @@
 
                             solutions.forEach((solution, index) => {
                                 let i = `
-                                    <button onclick="reveleSolution(${index + 1})" id="indice">Solution ${index + 1}</button>
+                                    <button onclick="reveleSolution(${index + 1})" id="solution${index + 1}">Solution ${index + 1}</button>
                                 `;
                                 iets.innerHTML += i;
                             })
@@ -178,7 +178,7 @@
                             })
 
                             let i = `
-                                <button onclick="reveleSolutionEntiere()" id="indice">Solution entière</button>
+                                <button onclick="reveleSolutionEntiere()" id="solution0">Solution entière</button>
                                 <div class="solution-entiere scrolled" style="display: none;">
                                     ${solutionEntiere.innerHTML}
                                 </div>
@@ -233,7 +233,24 @@
         }
     </script>
     <script>
+        const colorButton = (index, mode) => {
+            let iButtons = document.querySelectorAll('[id^="indice"]');
+            let sButtons = document.querySelectorAll('[id^="solution"]');
+
+            iButtons.forEach(button => {
+                button.style.backgroundColor = '';
+            });
+            sButtons.forEach(button => {
+                button.style.backgroundColor = '';
+            });
+
+            let button = document.querySelector(`#${mode}${index}`);
+            button.style.backgroundColor = 'lightblue';
+        }
+
         function reveleIndice(index) {
+            colorButton(index, 'indice');
+
             let scrolled = document.querySelectorAll('.scrolled');
             let indice = document.querySelector(`.i${index}`);
             scrolled = Array.from(scrolled).filter(element => element !== indice); // pour pouvoir recliquer sur le bouton
@@ -246,12 +263,19 @@
                 indice.style.display = 'none';
             }
             document.querySelectorAll('code').forEach((block) => {
-                block.classList.add('language-cpp')
-                hljs.highlightBlock(block);
+                if (!block.classList.contains('language-cpp')) {
+                    block.classList.add('language-cpp')
+                    if (block.dataset.highlighted) {
+                        delete block.dataset.highlighted;
+                    }
+                    hljs.highlightElement(block);
+                }
             });
         }
 
         function reveleSolution(index) {
+            colorButton(index, 'solution');
+
             let scrolled = document.querySelectorAll('.scrolled');
             let solution = document.querySelector(`.s${index}`);
             scrolled = Array.from(scrolled).filter(element => element !== solution); // pour pouvoir recliquer sur le bouton
@@ -264,12 +288,19 @@
                 solution.style.display = 'none';
             }
             document.querySelectorAll('code').forEach((block) => {
-                block.classList.add('language-cpp')
-                hljs.highlightElement(block);
+                if (!block.classList.contains('language-cpp')) {
+                    block.classList.add('language-cpp')
+                    if (block.dataset.highlighted) {
+                        delete block.dataset.highlighted;
+                    }
+                    hljs.highlightElement(block);
+                }
             });
         }
 
         function reveleSolutionEntiere() {
+            colorButton(0, 'solution');
+
             let scrolled = document.querySelectorAll('.scrolled');
             let solution = document.querySelector('.solution-entiere');
             scrolled = Array.from(scrolled).filter(element => element !== solution); // pour pouvoir recliquer sur le bouton
@@ -282,8 +313,13 @@
                 solution.style.display = 'none';
             }
             document.querySelectorAll('code').forEach((block) => {
-                block.classList.add('language-cpp')
-                hljs.highlightElement(block);
+                if (!block.classList.contains('language-cpp')) {
+                    block.classList.add('language-cpp')
+                    if (block.dataset.highlighted) {
+                        delete block.dataset.highlighted;
+                    }
+                    hljs.highlightElement(block);
+                }
             });
         }
     </script>
